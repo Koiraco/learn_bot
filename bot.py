@@ -1,3 +1,4 @@
+from emoji import emojize
 from glob import glob
 import logging
 from random import choice, randint
@@ -11,13 +12,20 @@ PROXY = {'proxy_url': settings.PROXY_URL,
     'urllib3_proxy_kwargs': {'username': settings.PROXY_USERNAME, 'password': settings.PROXY_PASSWORD}}
 
 def greet_user(update, context):
+    smile = get_smile()
     print("Вызван /start")
-    update.message.reply_text("Здравствуй, пользователь!")
+    update.message.reply_text(f"Здравствуй, пользователь {smile}!")
 
 def talk_to_me(update, context):
+    smile = get_smile()
     text = update.message.text
     print(text)
-    update.message.reply_text(text)
+    update.message.reply_text(f"{text} {smile}")
+
+def get_smile():
+    smile = choice(settings.USER_EMOJI)
+    return emojize(smile, use_aliases=True)
+
 
 def play_random_numbers(user_number):
     bot_number = randint(user_number - 10, user_number + 10)
